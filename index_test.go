@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestIndex(t *testing.T) {
+func TestIndex(t *testing.t) {
 	builder := NewIndexBuilder(DefaultMinBinarySearchRange)
 	ips := [][2]string{
 		[2]string{"1.0.0.0", "1.0.0.255"},
@@ -23,18 +23,18 @@ func TestIndex(t *testing.T) {
 	}
 	for i := 0; i < len(ips); i++ {
 		if err := builder.Add(net.ParseIP(ips[i][0]), net.ParseIP(ips[i][1]), values[i]); err != nil {
-			t.Error("builder.add fail: ip=%v, value=%v, error=%q", ips[i], values[i], err.Error())
+			t.Errorf("builder.add fail: ip=%v, value=%v, error=%q\n", ips[i], values[i], err.Error())
 			return
 		}
 	}
 	index := builder.Build()
 	value, err := index.Search(net.ParseIP("1.1.1.1"))
 	if err != nil {
-		t.Error("search 1.1.1.1 fail: %s", err.Error())
+		t.Error("search 1.1.1.1 fail:", err.Error())
 		return
 	}
 	if v, ok := value.(TestValue); !ok {
-		t.Error("type assertion fail: %t", value)
+		t.Error("type assertion fail:", value)
 		return
 	} else if string(v) != "福州" {
 		t.Errorf("unexpected search result: expected=%q, actual=%q\n", "福州", v)

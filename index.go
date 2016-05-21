@@ -6,9 +6,11 @@ import (
 )
 
 const (
+	// DefaultMinBinarySearchRange is the default value for minBinarySearchRange used for the situation the users won't decide this value by themself.
 	DefaultMinBinarySearchRange = 10
 )
 
+// Value represents a additional value of the IP section. The values must be comparable.
 type Value interface {
 	Equal(other interface{}) bool
 }
@@ -23,12 +25,18 @@ func (sec section) Value() Value {
 	return sec.value
 }
 
+// IPIndex represent a set of non-overlapping IP section and the addtional values.
+// It use binary search and linear search to find the secion contains special IP and return its addtitional value.
 type IPIndex struct {
 	sections             []section
 	index                [256][2]int
 	minBinarySearchRange int
 }
 
+// Search the IP and return the additional value. It returns nil if the IP is not indexed.
+// First, this function use index to narrow the search range by the A-Class IP section index.
+// Second, this function use binary search to find the section contains the IP until it is found or the count of remain sections is smaller than minBinarySearchRange.
+// Last, if it is not found in the second phase, this function use linear search to find the section contains the IP.
 func (index *IPIndex) Search(ip net.IP) (Value, error) {
 	key := ipToUint32(ip)
 	if key == 0 {

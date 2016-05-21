@@ -7,12 +7,14 @@ import (
 	"net"
 )
 
+// IndexBuilder build the IPIndex by add non-overlapping ip sections and the additional values in ascending order.
 type IndexBuilder struct {
 	sections             *list.List
 	last                 section
 	minBinarySearchRange int
 }
 
+// NewIndexBuilder create a new IndexBuilder instance and specified the minBinarySearchRange parameter for the IPIndex it will build.
 func NewIndexBuilder(minBinarySearchRange int) *IndexBuilder {
 	return &IndexBuilder{
 		sections:             list.New(),
@@ -20,10 +22,14 @@ func NewIndexBuilder(minBinarySearchRange int) *IndexBuilder {
 	}
 }
 
+// Reset the builder to initial state.
 func (builder *IndexBuilder) Reset() {
 	builder.sections.Init()
 }
 
+// Add a IP section and its addtional value. The lower bound must be bigger than last section added.
+// If the lower bound is adjacent to the upper bound of last section, and their are same kind of A-Class address,
+// and the value is equal to that of last section, the new section will merge to last section.
 func (builder *IndexBuilder) Add(lower, upper net.IP, value Value) error {
 	if lower := ipToUint32(lower); lower == 0 {
 		return fmt.Errorf("invalid lower: %v", lower)
@@ -81,6 +87,7 @@ func (builder *IndexBuilder) add(lower, upper uint32, value Value) error {
 	return nil
 }
 
+// Build the IPIndex.
 func (builder *IndexBuilder) Build() *IPIndex {
 	// 保存最后一个区间
 	if builder.last.lower > 0 {

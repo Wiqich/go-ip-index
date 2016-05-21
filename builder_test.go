@@ -33,7 +33,7 @@ func TestBuilder(t *testing.T) {
 	}
 	for i := 0; i < len(ips); i++ {
 		if err := builder.Add(net.ParseIP(ips[i][0]), net.ParseIP(ips[i][1]), values[i]); err != nil {
-			t.Error("builder.add fail: ip=%v, value=%v, error=%q", ips[i], values[i], err.Error())
+			t.Errorf("builder.add fail: ip=%v, value=%v, error=%q\n", ips[i], values[i], err.Error())
 			return
 		}
 	}
@@ -56,13 +56,13 @@ func TestBuilder(t *testing.T) {
 		},
 	}
 	if len(expectedSections) != len(index.sections) {
-		t.Error("unexpected sections: expected=%v, actual=%v", expectedSections, index.sections)
+		t.Errorf("unexpected sections: expected=%v, actual=%v\n", expectedSections, index.sections)
 		return
 	}
 	for i, exp := range expectedSections {
 		act := index.sections[i]
 		if exp.lower != act.lower || exp.upper != act.upper || !exp.Value().Equal(act.Value()) {
-			t.Error("unexpected sections: expected=%v, actual=%v", expectedSections, index.sections)
+			t.Errorf("unexpected sections: expected=%v, actual=%v\n", expectedSections, index.sections)
 			return
 		}
 	}
@@ -77,7 +77,7 @@ func TestBuilder(t *testing.T) {
 	expectedIndex[2][1] = 2
 	for i := 0; i < 256; i++ {
 		if index.index[i][0] != expectedIndex[i][0] || index.index[i][1] != expectedIndex[i][1] {
-			t.Error("unexpected index[%d]: expected=%v, actual=%v", i, expectedIndex[i], index.index[i])
+			t.Errorf("unexpected index[%d]: expected=%v, actual=%v\n", i, expectedIndex[i], index.index[i])
 			return
 		}
 	}

@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestIndex(t *testing.t) {
+func TestIndex(t *testing.T) {
 	builder := NewIndexBuilder(DefaultMinBinarySearchRange)
 	ips := [][2]string{
 		[2]string{"1.0.0.0", "1.0.0.255"},

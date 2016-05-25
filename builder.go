@@ -36,11 +36,12 @@ func (builder *IndexBuilder) Add(lower, upper net.IP, value Value) error {
 	} else if upper := ipToUint32(upper); upper == 0 {
 		return fmt.Errorf("invalid upper: %v", upper)
 	} else {
-		return builder.add(lower, upper, value)
+		return builder.AddUint32(lower, upper, value)
 	}
 }
 
-func (builder *IndexBuilder) add(lower, upper uint32, value Value) error {
+// AddUint32 add a IP section in uint32 format and its addtitional value. It works like IndexBuilder.Add.
+func (builder *IndexBuilder) AddUint32(lower, upper uint32, value Value) error {
 	// 检查参数
 	if lower == 0 {
 		return errors.New("lower bound cannot be 0")
@@ -53,15 +54,15 @@ func (builder *IndexBuilder) add(lower, upper uint32, value Value) error {
 	if lower>>24 < upper>>24 {
 		aLower := lower >> 24
 		aUpper := upper >> 24
-		if err := builder.add(lower, (aLower<<24)|0x00FFFFFF, value); err != nil {
+		if err := builder.AddUint32(lower, (aLower<<24)|0x00FFFFFF, value); err != nil {
 			return err
 		}
 		for i := aLower + 1; i < aUpper; i++ {
-			if err := builder.add(i<<24, (i<<24)|0x00FFFFFF, value); err != nil {
+			if err := builder.AddUint32(i<<24, (i<<24)|0x00FFFFFF, value); err != nil {
 				return err
 			}
 		}
-		if err := builder.add(aUpper<<24, upper, value); err != nil {
+		if err := builder.AddUint32(aUpper<<24, upper, value); err != nil {
 			return err
 		}
 		return nil

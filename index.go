@@ -25,8 +25,8 @@ func (sec section) Value() Value {
 	return sec.value
 }
 
-// IPIndex represent a set of non-overlapping IP section and the addtional values.
-// It use binary search and linear search to find the secion contains special IP and return its addtitional value.
+// IPIndex represent a set of non-overlapping IP section and the additional values.
+// It use binary search and linear search to find the secion contains special IP and return its additional value.
 type IPIndex struct {
 	sections             []section
 	index                [256][2]int

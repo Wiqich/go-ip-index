@@ -27,7 +27,7 @@ func (builder *IndexBuilder) Reset() {
 	builder.sections.Init()
 }
 
-// Add a IP section and its addtional value. The lower bound must be bigger than last section added.
+// Add a IP section and its additional value. The lower bound must be bigger than last section added.
 // If the lower bound is adjacent to the upper bound of last section, and their are same kind of A-Class address,
 // and the value is equal to that of last section, the new section will merge to last section.
 func (builder *IndexBuilder) Add(lower, upper net.IP, value Value) error {
@@ -54,17 +54,11 @@ func (builder *IndexBuilder) AddUint32(lower, upper uint32, value Value) error {
 	if lower>>24 < upper>>24 {
 		aLower := lower >> 24
 		aUpper := upper >> 24
-		if err := builder.AddUint32(lower, (aLower<<24)|0x00FFFFFF, value); err != nil {
-			return err
-		}
+		builder.AddUint32(lower, (aLower<<24)|0x00FFFFFF, value)
 		for i := aLower + 1; i < aUpper; i++ {
-			if err := builder.AddUint32(i<<24, (i<<24)|0x00FFFFFF, value); err != nil {
-				return err
-			}
+			builder.AddUint32(i<<24, (i<<24)|0x00FFFFFF, value)
 		}
-		if err := builder.AddUint32(aUpper<<24, upper, value); err != nil {
-			return err
-		}
+		builder.AddUint32(aUpper<<24, upper, value)
 		return nil
 	}
 	// 赋值首个区间

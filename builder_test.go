@@ -18,12 +18,12 @@ func (v TestValue) Equal(other interface{}) bool {
 func TestBuilder(t *testing.T) {
 	builder := NewIndexBuilder(DefaultMinBinarySearchRange)
 	ips := [][2]string{
-		[2]string{"1.0.0.0", "1.0.0.255"},
-		[2]string{"1.0.1.0", "1.0.1.255"},
-		[2]string{"1.0.2.0", "1.0.2.255"},
-		[2]string{"1.0.3.0", "1.0.3.255"},
-		[2]string{"1.0.4.0", "3.0.4.255"},
-		[2]string{"3.0.6.0", "3.0.6.255"},
+		{"1.0.0.0", "1.0.0.255"},
+		{"1.0.1.0", "1.0.1.255"},
+		{"1.0.2.0", "1.0.2.255"},
+		{"1.0.3.0", "1.0.3.255"},
+		{"1.0.4.0", "3.0.4.255"},
+		{"3.0.6.0", "3.0.6.255"},
 	}
 	values := []TestValue{
 		TestValue("上海"),
